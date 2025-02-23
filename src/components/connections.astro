@@ -1,7 +1,9 @@
 ---
 import { Image } from "astro:assets";
-import svgl from "../../public/visionary.png";
-import stockin from "../../public/mindstorms.png";
+import mindstorms from "../../public/mindstorms.png";
+import visionary from "../../public/visionary.png";
+import mod from "../../public/mod.png";
+import keyboard from "../../public/keyboard.png";
 
 interface Project {
   title: string;
@@ -13,32 +15,32 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: "StockIn",
-    image: stockin as ImageMetadata,
-    link: "https://github.com/gothsec/stockin-demo",
-    preview: "https://stockin-demo.vercel.app",
-    status: "In Development",
+    title: "EV3 Integration",
+    image: mindstorms as ImageMetadata,
+    link: "https://github.com/jirisitera/ev3-iotcraft",
+    preview: "",
+    status: "",
   },
   {
-    title: "Svgl.app",
-    image: svgl as ImageMetadata,
-    link: "https://github.com/pheralb/svgl",
-    preview: "https://svgl.app",
-    status: "Contributor",
+    title: "Visionary",
+    image: visionary as ImageMetadata,
+    link: "https://github.com/jirisitera/Visionary",
+    preview: "",
+    status: "",
   },
   {
-    title: "Svgl.app",
-    image: svgl as ImageMetadata,
-    link: "https://github.com/pheralb/svgl",
-    preview: "https://svgl.app",
-    status: "Contributor",
+    title: "IoTcraft",
+    image: mod as ImageMetadata,
+    link: "https://github.com/jirisitera/iotcraft",
+    preview: "",
+    status: "",
   },
   {
-    title: "Svgl.app",
-    image: svgl as ImageMetadata,
-    link: "https://github.com/pheralb/svgl",
-    preview: "https://svgl.app",
-    status: "Contributor",
+    title: "Remote Keyboard",
+    image: keyboard as ImageMetadata,
+    link: "https://github.com/jirisitera/remotekeyboard",
+    preview: "",
+    status: "",
   },
 ];
 ---

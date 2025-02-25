@@ -23,5 +23,5 @@ export default defineConfig({
     }
   )],
   site: 'https://jirisitera.github.io',
-	base: '',
+	base: '/',
 });

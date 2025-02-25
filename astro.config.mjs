@@ -22,6 +22,6 @@ export default defineConfig({
 			],
     }
   )],
-  site: 'https://jirisitera.github.io',
-	base: '/iotcraft-website',
+  site: 'https://iotcraft.teatech.cz',
+	base: '/',
 });

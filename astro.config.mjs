@@ -9,7 +9,7 @@ export default defineConfig({
     {
 			title: 'IoTcraft Docs',
 			social: {
-				github: 'https://github.com/tea-tech/website',
+				github: 'https://github.com/tea-tech/iotcraft-website',
 			},
 			sidebar: [
 				{
@@ -23,5 +23,5 @@ export default defineConfig({
     }
   )],
   site: 'https://jirisitera.github.io',
-	base: '/website',
+	base: '/iotcraft-website',
 });

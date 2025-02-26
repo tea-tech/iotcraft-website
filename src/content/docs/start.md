@@ -1,6 +1,6 @@
 ---
-title: My docs
-description: Learn more about my project in this docs site built with Starlight.
+title: Getting started
+description: Getting started with IoTcraft.
 ---
 
-Welcome to my project!
+Welcome! This is the documentation for IoTcraft. Here you will find everything you need to get started with IoTcraft.

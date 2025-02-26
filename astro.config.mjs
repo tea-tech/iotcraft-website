@@ -1,27 +1,33 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 import starlight from '@astrojs/starlight';
+import { ion } from "starlight-ion-theme";
 
-// https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), starlight(
-    {
+  site: 'https://iotcraft.teatech.cz',
+	base: '/',
+  integrations: [
+		tailwind(), 
+		starlight({
 			title: 'IoTcraft Docs',
+			favicon: '/favicon.ico',
+			logo: {
+        src: './public/iotcraft.png',
+      },
 			social: {
 				github: 'https://github.com/tea-tech/iotcraft-website',
 			},
 			sidebar: [
 				{
-					label: 'Guides',
+					label: 'Getting Started',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'start' },
+						{ label: 'First Steps', slug: 'start' },
 					],
 				},
 			],
-    }
-  )],
-  site: 'https://iotcraft.teatech.cz',
-	base: '/',
+			plugins: [
+				ion()
+      ]
+    })
+	],
 });

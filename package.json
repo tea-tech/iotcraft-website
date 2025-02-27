@@ -13,6 +13,7 @@
     "@astrojs/tailwind": "^6.0.0",
     "astro": "^5.3.1",
     "lenis": "^1.1.21",
+    "mqtt": "^5.10.4",
     "starlight-ion-theme": "^2.2.2"
   }
 }

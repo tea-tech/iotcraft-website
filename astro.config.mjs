@@ -12,7 +12,7 @@ export default defineConfig({
 			title: 'IoTcraft Docs',
 			favicon: '/favicon.ico',
 			logo: {
-        src: './public/iotcraft.png',
+        src: './src/images/iotcraft.png',
       },
 			social: {
 				github: 'https://github.com/tea-tech/iotcraft-website',

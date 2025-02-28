@@ -76,3 +76,27 @@
     }
   }
 </style>
+<script>
+
+import mqtt from "mqtt"
+
+const connectButton = window.document.getElementById("connectButton");
+const urlInput = window.document.getElementById("urlInput");
+const portInput = window.document.getElementById("portInput");
+const topicInput = window.document.getElementById("topicInput");
+
+connectButton?.addEventListener("click", connect);
+
+function connect() {
+  
+  const client = mqtt.connect("wss://" + urlInput?.nodeValue + ":" + portInput?.nodeValue + "/mqtt", {
+    clean: true,
+    connectTimeout: 4000,
+    clientId: crypto.randomUUID(),
+    username: "",
+    password: "",
+  })
+  client.publish("test", "Hello, World!")
+}
+
+</script>

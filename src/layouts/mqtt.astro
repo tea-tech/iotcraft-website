@@ -77,26 +77,114 @@
   }
 </style>
 <script>
-
 import mqtt from "mqtt"
 
 const connectButton = window.document.getElementById("connectButton");
+const connectionStatus = window.document.getElementById("connectionStatus");
 const urlInput = window.document.getElementById("urlInput");
 const portInput = window.document.getElementById("portInput");
 const topicInput = window.document.getElementById("topicInput");
+const chatbox = document.getElementById("chatbox");
+const userInput = document.getElementById("user-input");
+const sendButton = document.getElementById("send-button");
 
-connectButton?.addEventListener("click", connect);
+let client: mqtt.MqttClient | null;
+let url = (urlInput as HTMLInputElement).value;
+let port = (portInput as HTMLInputElement).value;
+let topic = (topicInput as HTMLInputElement).value;
+
+if (url == "") {
+  url = "test.mosquitto.org";
+}
+if (port == "") {
+  port = "8081";
+}
+if (topic == "") {
+  topic = "iotcraft-test";
+}
+
+connectButton?.addEventListener("click", function () {
+  if ((connectButton as HTMLButtonElement).disabled) {
+    return;
+  }
+  (connectButton as HTMLButtonElement).disabled = true;
+  connect();
+});
+
+sendButton?.addEventListener("click", sendMessage);
+
+userInput?.addEventListener("keyup", function (event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
+
+function sendMessage() {
+  const userMessage = (userInput as HTMLInputElement).value;
+  if (userMessage?.trim() !== "") {
+    transmit(userMessage);
+    (userInput as HTMLInputElement).value = "";
+  }
+}
 
 function connect() {
-  
-  const client = mqtt.connect("wss://" + urlInput?.nodeValue + ":" + portInput?.nodeValue + "/mqtt", {
-    clean: true,
-    connectTimeout: 4000,
+  if (client != null) {
+    if (connectionStatus == null) {
+      return;
+    }
+    client.end();
+    client = null;
+    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Disconnected</span>';
+    setTimeout(() => {
+      (connectButton as HTMLButtonElement).disabled = false;
+    }, 5000);
+    return;
+  }
+  client = mqtt.connect("wss://" + url + ":" + port + "/mqtt", {
     clientId: crypto.randomUUID(),
     username: "",
     password: "",
+    clean: true,
   })
-  client.publish("test", "Hello, World!")
+  if (connectionStatus == null) {
+    return;
+  }
+  client.on("connect", () => {
+    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Connected</span>';
+    client?.subscribe(topic);
+  });
+  client.on("message", (topic, message) => {
+    receive(message.toString());
+  });
+  setTimeout(() => {
+    (connectButton as HTMLButtonElement).disabled = false;
+  }, 5000);
+}
+
+function transmit(message: string | null) {
+  if (chatbox == null) {
+    return;
+  }
+  if (message == null) {
+    return;
+  }
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("mb-2", "text-right");
+  messageElement.innerHTML = `<p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">${message}</p>`;
+  chatbox.appendChild(messageElement);
+  chatbox.scrollTop = chatbox.scrollHeight;
+  client?.publish(topic, message);
+}
+
+function receive(message: string) {
+  if (chatbox == null) {
+    return;
+  }
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("mb-2");
+  messageElement.innerHTML = `<p class="bg-gray-700 text-white rounded-lg py-2 px-4 inline-block">${message}</p>`;
+  chatbox.appendChild(messageElement);
+  chatbox.scrollTop = chatbox.scrollHeight;
 }
 
 </script>

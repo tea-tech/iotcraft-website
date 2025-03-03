@@ -1,3 +1,7 @@
+---
+import "../styles/global.css"
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -93,7 +97,6 @@ import {
   DrawingUtils,
   HandLandmarker,
   FilesetResolver,
-  
 } from "@mediapipe/tasks-vision";
 const loadingScreen = window.document.getElementById("loadingScreen") as HTMLElement;
 const camera = window.document.getElementById("camera") as HTMLVideoElement;
@@ -120,82 +123,83 @@ const landmarker = await HandLandmarker.createFromOptions(await FilesetResolver.
     delegate: "GPU"
   },
   runningMode: "VIDEO",
-  numHands: 10
+  numHands: 2
 });
-setTimeout(function () {
+setTimeout(() => {
   loadingScreen.classList.add("hide");
 }, 500);
-setTimeout(function () {
+setTimeout(() => {
   loadingScreen.style.display = "none";
 }, 1500);
 let url;
 let port;
 let topic: string;
-let cameraStatus: boolean;
-let results: HandLandmarkerResult | undefined;
+let cameraActive: boolean;
 let lastTime: any;
-let x = 0;
-let y = 0;
-let lastX = 0;
-let lastY = 0;
-let topicX: string;
-let topicY: string;
+let x1 = 0;
+let y1 = 0;
+let x2 = 0;
+let y2 = 0;
+let results: HandLandmarkerResult | undefined;
 let client: mqtt.MqttClient;
-startButton.addEventListener("click", function() {
+startButton.addEventListener("click", () => {
   if (startButton.disabled) {
     return;
   }
   startButton.disabled = true;
-  bootUp();
+  activate();
 });
-async function bootUp() {
-  if (cameraStatus === true) {
-    cameraStatus = false;
+function activate() {
+  if (cameraActive) {
+    cameraActive = false;
+    if (client !== undefined) {
+      client.end();
+    }
     connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Deactivated</span>';
-    client.end();
     setTimeout(() => {
       startButton.disabled = false;
     }, 5000);
   } else {
-    cameraStatus = true;
+    cameraActive = true;
+    connect();
     connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Active</span>';
-    url = urlInput.value;
-    port = portInput.value;
-    topic = topicInput.value;
-    if (url == "") {
-      url = "test.mosquitto.org";
-    }
-    if (port == "") {
-      port = "8081";
-    }
-    if (topic == "") {
-      topic = "iotcraft-test";
-    }
-    client = mqtt.connect("wss://" + url + ":" + port + "/mqtt", {
-      clientId: crypto.randomUUID(),
-      username: "",
-      password: "",
-      clean: true,
-    })
-    client.on("connect", () => {
-      client.subscribe(topic)
-      topicX = topic + "_x"
-      client.subscribe(topicX)
-      topicY = topic + "_y"
-      client.subscribe(topicY)
-      window.setInterval(sendLocation, 1000);
-      connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Connected</span>';
-    });
     setTimeout(() => {
       startButton.disabled = false;
     }, 5000);
   }
-  window.navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
+  window.navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
     camera.srcObject = stream;
     camera.addEventListener("loadeddata", predictWebcam);
   });
 }
-async function predictWebcam() {
+function connect() {
+  url = urlInput.value;
+  port = portInput.value;
+  topic = topicInput.value;
+  if (url == "" && port == "" && topic == "") {
+    return;
+  }
+  if (url == "") {
+    url = "test.mosquitto.org";
+  }
+  if (port == "") {
+    port = "8081";
+  }
+  if (topic == "") {
+    topic = "iotcraft-test";
+  }
+  client = mqtt.connect("wss://" + url + ":" + port + "/mqtt", {
+    clientId: crypto.randomUUID(),
+    username: "",
+    password: "",
+    clean: true,
+  })
+  client.on("connect", () => {
+    client.subscribe(topic)
+    window.setInterval(handleBothHands, 1000);
+  });
+}
+function predictWebcam() {
   if (camera.currentTime !== lastTime) {
     lastTime = camera.currentTime;
     results = landmarker.detectForVideo(camera, Date.now());
@@ -213,22 +217,49 @@ async function predictWebcam() {
   for (const landmarks of landmarksResult) {
     drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {color: "#646464", lineWidth: 10});
     drawingUtils.drawLandmarks(landmarks, {color: "#FFFFFF", lineWidth: 4});
-    x = landmarks[8].x;
-    y = landmarks[8].y;
+    const indexFinger = landmarks[8];
+    const x = indexFinger.x;
+    const y = indexFinger.y;
+    drawingCanvas.beginPath();
+    drawingCanvas.arc(x * canvas.width, y * canvas.height, 20, 0, 2 * Math.PI);
+    drawingCanvas.fillStyle = "#FF0000";
+    drawingCanvas.fill();
+    drawingCanvas.closePath();
+  }
+  if (landmarksResult.length == 2) {
+    x1 = landmarksResult[0][8].x;
+    y1 = landmarksResult[0][8].y;
+    x2 = landmarksResult[1][8].x;
+    y2 = landmarksResult[1][8].y;
   }
   drawingCanvas.restore();
-  if (cameraStatus === true) {
+  if (cameraActive) {
     window.requestAnimationFrame(predictWebcam);
   }
 }
-async function sendLocation() {
-  if (x !== lastX) {
-    client.publish(topicX, x.toString())
-    lastX = x;
+function handleBothHands() {
+  const status1 = sendControls(x1, y1, x2, y2);
+  const status2 = sendControls(x2, y2, x1, y1);
+  if (status1 && status2) {
+    client.publish(topic, "stop");
   }
-  if (y !== lastY) {
-    client.publish(topicY, y.toString())
-    lastY = y;
+}
+function sendControls(xDrive: number, yDrive: number, xSpeed: number, ySpeed: number) {
+  if (isInsideCircle(0.75, 0.5, 0.1, xDrive, yDrive)) {
+    if (isInsideCircle(0.25, 0.5, 0.3, xSpeed, ySpeed)) {
+      sendDriveDistance(ySpeed);
+      return false;
+    }
   }
+  return true;
+}
+function isInsideCircle(circleX: number, circleY: number, rad: number, x: number, y: number) {
+  return ((x - circleX) * (x - circleX) + (y - circleY) * (y - circleY) <= rad * rad);
+}
+function sendDriveDistance(y: number) {
+  const reversed = 1 - y;
+  const centered = reversed - 0.5;
+  const distance = centered * 1000;
+  client.publish(topic, Math.floor(distance).toString());
 }
 </script>

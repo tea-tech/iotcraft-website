@@ -78,65 +78,60 @@
 </style>
 <script>
 import mqtt from "mqtt"
-
-const connectButton = window.document.getElementById("connectButton");
-const connectionStatus = window.document.getElementById("connectionStatus");
-const urlInput = window.document.getElementById("urlInput");
-const portInput = window.document.getElementById("portInput");
-const topicInput = window.document.getElementById("topicInput");
-const chatbox = document.getElementById("chatbox");
-const userInput = document.getElementById("user-input");
-const sendButton = document.getElementById("send-button");
-
-let client: mqtt.MqttClient | null;
-let url = (urlInput as HTMLInputElement).value;
-let port = (portInput as HTMLInputElement).value;
-let topic = (topicInput as HTMLInputElement).value;
-
+const chatbox = document.getElementById("chatbox") as HTMLElement;
+const sendButton = document.getElementById("sendButton") as HTMLButtonElement;
+const connectButton = window.document.getElementById("connectButton") as HTMLInputElement;
+const connectionStatus = window.document.getElementById("connectionStatus") as HTMLElement;
+const textInput = document.getElementById("textInput") as HTMLInputElement;
+const urlInput = window.document.getElementById("urlInput") as HTMLInputElement;
+const portInput = window.document.getElementById("portInput") as HTMLInputElement;
+const topicSendInput = window.document.getElementById("topicSendInput") as HTMLInputElement;
+const topicReceiveInput = window.document.getElementById("topicReceiveInput") as HTMLInputElement;
+const parameters = new URLSearchParams(window.location.search);
+const urlValue = parameters.get("url");
+if (urlValue !== null) {
+  urlInput.value = urlValue;
+}
+const portValue = parameters.get("port");
+if (portValue !== null) {
+  portInput.value = portValue;
+}
+const topicSendValue = parameters.get("topicSend");
+if (topicSendValue !== null) {
+  topicSendInput.value = topicSendValue;
+}
+const topicReceiveValue = parameters.get("topicReceive");
+if (topicReceiveValue !== null) {
+  topicReceiveInput.value = topicReceiveValue;
+}
+let client: mqtt.MqttClient;
+let url = urlInput.value;
+let port = portInput.value;
+let topicSend = topicSendInput.value;
+let topicReceive = topicReceiveInput.value;
 if (url == "") {
   url = "test.mosquitto.org";
 }
 if (port == "") {
   port = "8081";
 }
-if (topic == "") {
-  topic = "iotcraft-test";
+if (topicSend == "") {
+  topicSend = "iotcraft/send";
 }
-
-connectButton?.addEventListener("click", function () {
-  if ((connectButton as HTMLButtonElement).disabled) {
+if (topicReceive == "") {
+  topicReceive = "iotcraft/receive";
+}
+connectButton.addEventListener("click", connect);
+function connect() {
+  if (connectButton.disabled) {
     return;
   }
-  (connectButton as HTMLButtonElement).disabled = true;
-  connect();
-});
-
-sendButton?.addEventListener("click", sendMessage);
-
-userInput?.addEventListener("keyup", function (event) {
-  if (event.key === "Enter") {
-    sendMessage();
-  }
-});
-
-function sendMessage() {
-  const userMessage = (userInput as HTMLInputElement).value;
-  if (userMessage?.trim() !== "") {
-    transmit(userMessage);
-    (userInput as HTMLInputElement).value = "";
-  }
-}
-
-function connect() {
-  if (client != null) {
-    if (connectionStatus == null) {
-      return;
-    }
+  connectButton.disabled = true;
+  if (connectionStatus.innerHTML.includes("Connected")) {
     client.end();
-    client = null;
     connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Disconnected</span>';
     setTimeout(() => {
-      (connectButton as HTMLButtonElement).disabled = false;
+      connectButton.disabled = false;
     }, 5000);
     return;
   }
@@ -146,26 +141,33 @@ function connect() {
     password: "",
     clean: true,
   })
-  if (connectionStatus == null) {
-    return;
-  }
   client.on("connect", () => {
     connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Connected</span>';
-    client?.subscribe(topic);
+    client.subscribe(topicReceive);
   });
-  client.on("message", (topic, message) => {
+  client.on("message", (_topic, message) => {
     receive(message.toString());
   });
   setTimeout(() => {
-    (connectButton as HTMLButtonElement).disabled = false;
+    connectButton.disabled = false;
   }, 5000);
 }
-
-function transmit(message: string | null) {
-  if (chatbox == null) {
-    return;
+function receive(message: string) {
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("mb-2");
+  messageElement.innerHTML = `<p class="bg-gray-700 text-white rounded-lg py-2 px-4 inline-block">${message}</p>`;
+  chatbox.appendChild(messageElement);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+sendButton.addEventListener("click", send);
+textInput.addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
+    send();
   }
-  if (message == null) {
+});
+function send() {
+  const message = textInput.value;
+  if (message.trim() == "") {
     return;
   }
   const messageElement = document.createElement("div");
@@ -173,18 +175,7 @@ function transmit(message: string | null) {
   messageElement.innerHTML = `<p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">${message}</p>`;
   chatbox.appendChild(messageElement);
   chatbox.scrollTop = chatbox.scrollHeight;
-  client?.publish(topic, message);
+  client.publish(topicSend, message);
+  textInput.value = "";
 }
-
-function receive(message: string) {
-  if (chatbox == null) {
-    return;
-  }
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("mb-2");
-  messageElement.innerHTML = `<p class="bg-gray-700 text-white rounded-lg py-2 px-4 inline-block">${message}</p>`;
-  chatbox.appendChild(messageElement);
-  chatbox.scrollTop = chatbox.scrollHeight;
-}
-
 </script>

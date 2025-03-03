@@ -11,8 +11,9 @@
   "dependencies": {
     "@astrojs/starlight": "^0.32.2",
     "@astrojs/tailwind": "^6.0.0",
-    "astro": "^5.4.0",
-    "lenis": "^1.1.21",
+    "@mediapipe/tasks-vision": "^0.10.21",
+    "astro": "^5.4.1",
+    "lenis": "^1.1.22",
     "mqtt": "^5.10.4",
     "starlight-ion-theme": "^2.2.2"
   }

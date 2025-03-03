@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+	<head>
+    <title>IoTcraft</title>
+		<meta charset="UTF-8" />
+    <meta name="description" content="Connecting the virtual world with the physical." />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" />
+    </noscript>
+	</head>
+  <body class="bg-[var(--background)]">
+    <slot/>
+	<body/>
+</html>
+<style is:global>
+  :root {
+    --background: #101010;
+    --sec: #0561ad;
+    --white: #dfdfdf;
+    --white-icon: #f3f3f398;
+    --white-icon-tr: #f3f3f310;
+  }
+  * {
+    font-family:
+      "montserrat",
+      -apple-system,
+      system-ui,
+      sans-serif;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  *::selection {
+    background-color: var(--sec);
+    color: var(--background);
+  }
+  ::-webkit-scrollbar {
+    width: 15px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--container);
+    border-radius: 30px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--background);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--pink);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) var(--container);
+  }
+  .shiny-sec {
+    background: linear-gradient(135deg, var(--sec) 25%, #eee5ff 50%, var(--sec) 75%);
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s linear infinite;
+  }
+  @keyframes shine {
+    0% {
+      background-position: 100% 50%;
+    }
+    30%,
+    70% {
+      background-position: 0% 50%;
+    }
+  }
+  .rotate {
+    transform: rotateY(180deg);
+  }
+  #loadingScreen {
+    opacity: 1;
+    transition: opacity 0.9s linear;
+  }
+  #loadingScreen.hide {
+    opacity: 0;
+  }
+</style>
+<script>
+import mqtt from "mqtt"
+import {
+  type HandLandmarkerResult,
+  DrawingUtils,
+  HandLandmarker,
+  FilesetResolver,
+} from "@mediapipe/tasks-vision";
+const loadingScreen = window.document.getElementById("loadingScreen") as HTMLElement;
+const camera = window.document.getElementById("camera") as HTMLVideoElement;
+const canvas = window.document.getElementById("canvas") as HTMLCanvasElement;
+const startButton = window.document.getElementById("startButton") as HTMLButtonElement;
+const connectionStatus = window.document.getElementById("connectionStatus") as HTMLElement;
+const drawingCanvas = canvas.getContext("2d") as CanvasRenderingContext2D;
+const urlInput = window.document.getElementById("urlInput") as HTMLInputElement;
+const portInput = window.document.getElementById("portInput") as HTMLInputElement;
+const topicInput = window.document.getElementById("topicInput") as HTMLInputElement;
+const parameters = new URLSearchParams(window.location.search);
+if (parameters.get("url") !== null) {
+  urlInput.value = parameters.get("url") as string;
+}
+if (parameters.get("port") !== null) {
+  portInput.value = parameters.get("port") as string;
+}
+if (parameters.get("topic") !== null) {
+  topicInput.value = parameters.get("topic") as string;
+}
+const landmarker = await HandLandmarker.createFromOptions(await FilesetResolver.forVisionTasks("node_modules/@mediapipe/tasks-vision/wasm"), {
+  baseOptions: {
+    modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+    delegate: "GPU"
+  },
+  runningMode: "VIDEO",
+  numHands: 10
+});
+setTimeout(function () {
+  loadingScreen.classList.add("hide");
+}, 500);
+setTimeout(function () {
+  loadingScreen.style.display = "none";
+}, 1500);
+let url;
+let port;
+let topic: string;
+let cameraStatus: boolean;
+let results: HandLandmarkerResult | undefined;
+let lastTime: any;
+let x = 0;
+let y = 0;
+let lastX = 0;
+let lastY = 0;
+let topicX: string;
+let topicY: string;
+let client: mqtt.MqttClient;
+startButton.addEventListener("click", function() {
+  if (startButton.disabled) {
+    return;
+  }
+  startButton.disabled = true;
+  bootUp();
+});
+async function bootUp() {
+  if (cameraStatus === true) {
+    cameraStatus = false;
+    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Deactivated</span>';
+    client.end();
+    setTimeout(() => {
+      startButton.disabled = false;
+    }, 5000);
+  } else {
+    cameraStatus = true;
+    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Active</span>';
+    url = urlInput.value;
+    port = portInput.value;
+    topic = topicInput.value;
+    if (url == "") {
+      url = "test.mosquitto.org";
+    }
+    if (port == "") {
+      port = "8081";
+    }
+    if (topic == "") {
+      topic = "iotcraft-test";
+    }
+    client = mqtt.connect("wss://" + url + ":" + port + "/mqtt", {
+      clientId: crypto.randomUUID(),
+      username: "",
+      password: "",
+      clean: true,
+    })
+    client.on("connect", () => {
+      client.subscribe(topic)
+      topicX = topic + "_x"
+      client.subscribe(topicX)
+      topicY = topic + "_y"
+      client.subscribe(topicY)
+      window.setInterval(sendLocation, 1000);
+      connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Connected</span>';
+    });
+    setTimeout(() => {
+      startButton.disabled = false;
+    }, 5000);
+  }
+  window.navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
+    camera.srcObject = stream;
+    camera.addEventListener("loadeddata", predictWebcam);
+  });
+}
+async function predictWebcam() {
+  if (camera.currentTime !== lastTime) {
+    lastTime = camera.currentTime;
+    results = landmarker.detectForVideo(camera, Date.now());
+  }
+  drawingCanvas.save();
+  drawingCanvas.clearRect(0, 0, canvas.width, canvas.height);
+  if (results === undefined) {
+    return;
+  }
+  const landmarksResult = results.landmarks;
+  if (!landmarksResult) {
+    return;
+  }
+  const drawingUtils = new DrawingUtils(drawingCanvas);
+  for (const landmarks of landmarksResult) {
+    drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {color: "#646464", lineWidth: 10});
+    drawingUtils.drawLandmarks(landmarks, {color: "#FFFFFF", lineWidth: 4});
+    x = landmarks[8].x;
+    y = landmarks[8].y;
+  }
+  drawingCanvas.restore();
+  if (cameraStatus === true) {
+    window.requestAnimationFrame(predictWebcam);
+  }
+}
+async function sendLocation() {
+  if (x !== lastX) {
+    client.publish(topicX, x.toString())
+    lastX = x;
+  }
+  if (y !== lastY) {
+    client.publish(topicY, y.toString())
+    lastY = y;
+  }
+}
+</script>

@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
-    --color-primary : var(--color-indigo-600);
-    --color-secondary : var(--color-orange-600);
-    --color-info : var(--color-blue-600);
+    --color-primary: var(--color-indigo-600);
+    --color-secondary: var(--color-orange-600);
+    --color-info: var(--color-blue-600);
+    --color-main: var(--color-blue-500);
 }

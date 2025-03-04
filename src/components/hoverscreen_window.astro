@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import iotcraft from "../images/iotcraft.png";
 ---
-
 <div id="loadingScreen" class="absolute backdrop-blur-xl bg-opacity-75 z-10 h-full w-full flex items-center justify-center">
   <div class="flex items-center">
     <span class="text-3xl mr-4 text-white">Loading</span>
@@ -18,8 +17,8 @@ import iotcraft from "../images/iotcraft.png";
 <div class="md:px-48 lg:px-20 px-9 max-w-5xl mx-auto space-y-10 pt-10 pb-10">
   <div class="flex flex-col lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
     <Image loading="eager" src={iotcraft} alt="IoTcraft Logo" class="h-12 w-12 md:h-16 md:w-16"/>
-    <h1 class="text-[var(--sec)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">Vision</h1>
-    <p class="text-md md:text-2xl text-[var(--white-icon)]">Hoverscreen Mode</p>
+    <h1 class="text-[var(--color-main)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">Vision</h1>
+    <p class="text-md md:text-2xl text-white">Hoverscreen Mode</p>
   </div>
   <div class="grid gap-6 mb-6 md:grid-cols-3">
     <div>
@@ -54,3 +53,32 @@ import iotcraft from "../images/iotcraft.png";
     <div class="absolute -translate-x-1/2 -translate-y-1/2 left-1/4 top-1/2 h-20 w-20 rounded-full backdrop-blur-xl bg-opacity-75 bg-gray-50 transition-colors duration-150"></div>
   </div>
 </div>
+<style>
+  .shiny-sec {
+    background: linear-gradient(135deg, var(--color-main) 25%, #eee5ff 50%, var(--color-main) 75%);
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s linear infinite;
+  }
+  @keyframes shine {
+    0% {
+      background-position: 100% 50%;
+    }
+    30%,
+    70% {
+      background-position: 0% 50%;
+    }
+  }
+  .rotate {
+    transform: rotateY(180deg);
+  }
+  #loadingScreen {
+    opacity: 1;
+    transition: opacity 0.9s linear;
+  }
+  #loadingScreen.hide {
+    opacity: 0;
+  }
+</style>

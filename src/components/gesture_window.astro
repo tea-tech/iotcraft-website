@@ -2,12 +2,23 @@
 import { Image } from "astro:assets";
 import iotcraft from "../images/iotcraft.png";
 ---
-
-<div class="max-w-5xl mx-auto space-y-10 pt-10 pb-10">
+<div id="loadingScreen" class="absolute backdrop-blur-xl bg-opacity-75 z-10 h-full w-full flex items-center justify-center">
+  <div class="flex items-center">
+    <span class="text-3xl mr-4 text-white">Loading</span>
+    <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#ffffff" stroke-width="4"></circle>
+      <path class="opacity-75" fill="#ffffff"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+      </path>
+    </svg>
+  </div>
+</div>
+<div class="md:px-48 lg:px-20 px-9 max-w-5xl mx-auto space-y-10 pt-10 pb-10">
   <div class="flex flex-col lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
     <Image loading="eager" src={iotcraft} alt="IoTcraft Logo" class="h-12 w-12 md:h-16 md:w-16"/>
-    <h1 class="text-[var(--sec)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">Vision</h1>
-    <p class="text-md md:text-2xl text-[var(--white-icon)]">Gesture Mode</p>
+    <h1 class="text-[var(--color-main)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">Vision</h1>
+    <p class="text-md md:text-2xl text-white">Hoverscreen Mode</p>
   </div>
   <div class="grid gap-6 mb-6 md:grid-cols-3">
     <div>
@@ -26,18 +37,39 @@ import iotcraft from "../images/iotcraft.png";
   <label class="flex p-8 rounded-md bg-gray-800 border-gray-400 justify-center cursor-pointer">
     <input id="startButton" type="checkbox" value="" class="sr-only peer">
     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-    <span class="ms-3 mt-0.5 mr-4 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle MQTT Connection</span>
+    <span class="ms-3 mt-0.5 mr-4 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Hoverscreen Activity</span>
     <div id="connectionStatus">
       <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300">
         <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-        Disconnected
+        Deactivated
       </span>
     </div>
   </label>
-  
-  <div class="relative bg-gray-800 rounded-lg shadow-lg">
-    <video id="camera" class="rotate w-full h-full" autoplay playsinline></video>
-    <canvas id="canvas" class="rotate absolute z-10 top-0 left-0 right-0 bottom-0 min-w-full min-h-full max-w-full max-h-full" height="720" width="1280"></canvas>
+  <div class="relative bg-gray-800 rounded-lg">
+    <video id="camera" class="rotate rounded-lg w-full h-full opacity-0.5" autoplay playsinline></video>
+    <canvas id="canvas" class="rotate rounded-lg absolute z-10 top-0 left-0 right-0 bottom-0 min-w-full min-h-full max-w-full max-h-full" height="720" width="1280"></canvas>
   </div>
   <p id="output"></p>
 </div>
+<style>
+  .shiny-sec {
+    background: linear-gradient(135deg, var(--sec) 25%, #eee5ff 50%, var(--sec) 75%);
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s linear infinite;
+  }
+  @keyframes shine {
+    0% {
+      background-position: 100% 50%;
+    }
+    30%,
+    70% {
+      background-position: 0% 50%;
+    }
+  }
+  .rotate {
+    transform: rotateY(180deg);
+  }
+</style>

@@ -4,33 +4,27 @@ import AppFooter from "../components/AppFooter.astro";
 import AppHeader from "../components/AppHeader.astro";
 import "../styles/global.css"
 ---
-
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>IoTcraft</title>
-        <meta charset="UTF-8" />
+  <head>
+    <title>IoTcraft</title>
+    <meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Connecting the virtual world with the physical." />
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <meta name="description" content="Connecting the virtual world with the physical." />
-
-        <AstroFont
-            config={[
-                {
-                    src: [],
-                    name: "Urbanist",
-                    preload: true,
-                    display: "swap",
-                    selector: "html",
-                    fallback: "sans-serif",
-                    googleFontsURL: 'https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap',
-                },
-            ]}
-        />
-    </head>
-    <body class="bg-white dark:bg-gray-950">
-        <AppHeader />
-        <slot />
-        <AppFooter />
-    </body>
+    <AstroFont config={[{
+      src: [],
+      name: "Urbanist",
+      preload: true,
+      display: "swap",
+      selector: "html",
+      fallback: "sans-serif",
+      googleFontsURL: 'https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap',
+    }]}/>
+  </head>
+  <body class="bg-white dark:bg-gray-950">
+    <AppHeader />
+    <slot />
+    <AppFooter />
+  </body>
 </html>

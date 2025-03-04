@@ -49,3 +49,22 @@ import iotcraft from "../images/iotcraft.png";
     </div>
   </div>
 </div>
+<style>
+  .shiny-sec {
+    background: linear-gradient(135deg, var(--sec) 25%, #eee5ff 50%, var(--sec) 75%);
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s linear infinite;
+  }
+  @keyframes shine {
+    0% {
+      background-position: 100% 50%;
+    }
+    30%,
+    70% {
+      background-position: 0% 50%;
+    }
+  }
+</style>

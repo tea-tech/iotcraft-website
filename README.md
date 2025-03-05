@@ -1,3 +1,3 @@
-# IoTcraft
+# IoTcraft Website
 
-Connecting the virtual world with the physical.
+A modern website for IoTcraft built with Astro, Tailwind CSS, and TypeScript. Licensed under the MIT License.

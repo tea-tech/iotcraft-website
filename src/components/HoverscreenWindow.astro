@@ -1,0 +1,239 @@
+---
+import Container from "./Container.astro";
+---
+<div id="loadingScreen" class="fixed backdrop-blur-xl bg-opacity-75 z-10 h-full w-full flex items-center justify-center">
+  <div class="flex items-center">
+    <span class="text-3xl mr-4 text-white">Loading</span>
+    <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#ffffff" stroke-width="4"></circle>
+      <path class="opacity-75" fill="#ffffff"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+      </path>
+    </svg>
+  </div>
+</div>
+<div aria-hidden="true" class="absolute pointer-events-none inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+  <div class="blur-[106px] h-56 bg-gradient-to-br from-[var(--color-main)] to-purple-400 dark:from-blue-700"></div>
+  <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
+</div>
+<Container>
+<div class="space-y-10 pt-20 pb-10">
+  <div class="flex flex-col lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
+    <h1 class="text-[var(--color-main)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">Vision</h1>
+    <p class="text-md md:text-2xl text-white">Hoverscreen Mode</p>
+  </div>
+  <div class="grid gap-6 mb-6 md:grid-cols-3">
+    <div>
+      <label for="urlInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT Broker URL</label>
+      <input type="text" id="urlInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="test.mosquitto.org" required />
+    </div>
+    <div>
+      <label for="portInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT Broker Port</label>
+      <input type="text" id="portInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="8081" required />
+    </div>
+    <div>
+      <label for="topicInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Main Topic To Connect To</label>
+      <input type="text" id="topicInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="iotcraft-test" required />
+    </div>
+  </div>
+  <label class="flex p-8 rounded-md bg-gray-800 border-gray-400 justify-center cursor-pointer">
+    <input id="startButton" type="checkbox" value="" class="sr-only peer">
+    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+    <span class="ms-3 mt-0.5 mr-4 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Hoverscreen Detection</span>
+    <div id="connectionStatus">
+      <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300">
+        <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+        Deactivated
+      </span>
+    </div>
+  </label>
+  <div class="relative bg-gray-800 rounded-lg">
+    <video id="camera" class="rotate rounded-lg w-full h-full opacity-100" autoplay playsinline></video>
+    <canvas id="canvas" class="rotate rounded-lg absolute z-10 inset-0 min-w-full min-h-full max-w-full max-h-full" height="720" width="1280"></canvas>
+    <div id="controls" class="opacity-0">
+      <div class="absolute -translate-x-1/2 -translate-y-1/2 right-1/8 top-1/2 h-120 w-15 rounded-full backdrop-blur-sm bg-[rgba(255,255,255,0.6)] border-[rgba(255,255,255,0.5)]"></div>
+      <div class="absolute -translate-x-1/2 -translate-y-1/2 left-1/8 top-1/2 h-30 w-30 rounded-full backdrop-blur-sm bg-[rgba(255,255,255,0.6)] border-[rgba(255,255,255,0.5)]"></div>
+    </div>
+  </div>
+</div>
+</Container>
+<script>
+import mqtt from "mqtt"
+import {
+  type HandLandmarkerResult,
+  DrawingUtils,
+  HandLandmarker,
+  FilesetResolver
+} from "@mediapipe/tasks-vision";
+const loadingScreen = window.document.getElementById("loadingScreen") as HTMLElement;
+const camera = window.document.getElementById("camera") as HTMLVideoElement;
+const canvas = window.document.getElementById("canvas") as HTMLCanvasElement;
+const controls = window.document.getElementById("controls") as HTMLElement;
+const startButton = window.document.getElementById("startButton") as HTMLButtonElement;
+const connectionStatus = window.document.getElementById("connectionStatus") as HTMLElement;
+const drawingCanvas = canvas.getContext("2d") as CanvasRenderingContext2D;
+const urlInput = window.document.getElementById("urlInput") as HTMLInputElement;
+const portInput = window.document.getElementById("portInput") as HTMLInputElement;
+const topicInput = window.document.getElementById("topicInput") as HTMLInputElement;
+const parameters = new URLSearchParams(window.location.search);
+if (parameters.get("url") !== null) {
+  urlInput.value = parameters.get("url") as string;
+}
+if (parameters.get("port") !== null) {
+  portInput.value = parameters.get("port") as string;
+}
+if (parameters.get("topic") !== null) {
+  topicInput.value = parameters.get("topic") as string;
+}
+const landmarker = await HandLandmarker.createFromOptions(await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"), {
+  baseOptions: {
+    modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+    delegate: "GPU"
+  },
+  runningMode: "VIDEO",
+  numHands: 2
+});
+setTimeout(() => {
+  loadingScreen.classList.add("hide");
+}, 500);
+setTimeout(() => {
+  loadingScreen.style.display = "none";
+}, 1500);
+let url;
+let port;
+let topic: string;
+let cameraActive: boolean;
+let lastTime: any;
+let x1 = 0;
+let y1 = 0;
+let x2 = 0;
+let y2 = 0;
+let results: HandLandmarkerResult | undefined;
+let client: mqtt.MqttClient;
+startButton.addEventListener("click", () => {
+  if (startButton.disabled) {
+    return;
+  }
+  startButton.disabled = true;
+  activate();
+});
+function activate() {
+  if (cameraActive) {
+    cameraActive = false;
+    if (client !== undefined) {
+      client.end();
+    }
+    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Deactivated</span>';
+    controls.style.opacity = "0";
+    setTimeout(() => {
+      startButton.disabled = false;
+    }, 5000);
+  } else {
+    cameraActive = true;
+    connect();
+    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Active</span>';
+    controls.style.opacity = "100";
+    setTimeout(() => {
+      startButton.disabled = false;
+    }, 5000);
+  }
+  window.navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
+    camera.srcObject = stream;
+    camera.addEventListener("loadeddata", predictWebcam);
+  });
+}
+function connect() {
+  url = urlInput.value;
+  port = portInput.value;
+  topic = topicInput.value;
+  if (url == "" && port == "" && topic == "") {
+    return;
+  }
+  if (url == "") {
+    url = "test.mosquitto.org";
+  }
+  if (port == "") {
+    port = "8081";
+  }
+  if (topic == "") {
+    topic = "iotcraft-test";
+  }
+  client = mqtt.connect("wss://" + url + ":" + port + "/mqtt", {
+    clientId: crypto.randomUUID(),
+    username: "",
+    password: "",
+    clean: true,
+  })
+  client.on("connect", () => {
+    client.subscribe(topic)
+    window.setInterval(handleBothHands, 1000);
+  });
+}
+function predictWebcam() {
+  if (camera.currentTime !== lastTime) {
+    lastTime = camera.currentTime;
+    results = landmarker.detectForVideo(camera, Date.now());
+  }
+  drawingCanvas.save();
+  drawingCanvas.clearRect(0, 0, canvas.width, canvas.height);
+  if (results === undefined) {
+    return;
+  }
+  const landmarksResult = results.landmarks;
+  if (!landmarksResult) {
+    return;
+  }
+  const drawingUtils = new DrawingUtils(drawingCanvas);
+  for (const landmarks of landmarksResult) {
+    drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {color: "#646464", lineWidth: 10});
+    drawingUtils.drawLandmarks(landmarks, {color: "#FFFFFF", lineWidth: 4});
+    const indexFinger = landmarks[8];
+    const x = indexFinger.x;
+    const y = indexFinger.y;
+    drawingCanvas.beginPath();
+    drawingCanvas.arc(x * canvas.width, y * canvas.height, 15, 0, 2 * Math.PI);
+    drawingCanvas.fillStyle = "#FFFFFF";
+    drawingCanvas.fill();
+    drawingCanvas.closePath();
+  }
+  if (landmarksResult.length == 2) {
+    x1 = landmarksResult[0][8].x;
+    y1 = landmarksResult[0][8].y;
+    x2 = landmarksResult[1][8].x;
+    y2 = landmarksResult[1][8].y;
+  }
+  drawingCanvas.restore();
+  if (cameraActive) {
+    window.requestAnimationFrame(predictWebcam);
+  }
+}
+function handleBothHands() {
+  const status1 = sendControls(x1, y1, x2, y2);
+  const status2 = sendControls(x2, y2, x1, y1);
+  if (status1 && status2) {
+    client.publish(topic, "stop");
+  }
+}
+function sendControls(xDrive: number, yDrive: number, xSpeed: number, ySpeed: number) {
+  if (isInsideCircle(xDrive, yDrive, 0.875, 0.5, 0.0625)) {
+    if (isInsideRectangle(xSpeed, ySpeed, 0.15625, 0.875, 0.09375, 0.125)) {
+      sendDriveDistance(ySpeed);
+      return false;
+    }
+  }
+  return true;
+}
+function isInsideCircle(x: number, y: number, circleX: number, circleY: number, rad: number) {
+  return ((x - circleX) * (x - circleX) + (y - circleY) * (y - circleY) <= rad * rad);
+}
+function isInsideRectangle(x: number, y: number, rectX1: number, rectY1: number, rectX2: number, rectY2: number) {
+  return (x >= rectX1 && x <= rectX2 && y >= rectY1 && y <= rectY2);
+}
+function sendDriveDistance(y: number) {
+  const reversed = 1 - y;
+  const centered = reversed - 0.5;
+  const distance = centered * 1000;
+  client.publish(topic, Math.floor(distance).toString());
+}
+</script>

@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@main
       - uses: withastro/action@main
         with:
+          package-manager: pnpm@latest
           node-version: latest
   deploy:
     needs: build

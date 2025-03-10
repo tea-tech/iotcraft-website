@@ -1,329 +1,351 @@
 ---
 import Container from "./Container.astro";
 ---
-<div id="loadingScreen" class="fixed backdrop-blur-xl bg-opacity-75 z-10 h-full w-full flex items-center justify-center">
-  <div class="flex items-center">
-    <span class="text-3xl mr-4 text-white">Loading</span>
-    <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-      viewBox="0 0 24 24">
-      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#ffffff" stroke-width="4"></circle>
-      <path class="opacity-75" fill="#ffffff"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-      </path>
-    </svg>
-  </div>
+<div id="loadingScreen"
+     class="fixed backdrop-blur-xl bg-opacity-75 z-10 h-full w-full flex items-center justify-center">
+    <div class="flex items-center">
+        <span class="text-3xl mr-4 text-white">Loading</span>
+        <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#ffffff" stroke-width="4"></circle>
+            <path class="opacity-75" fill="#ffffff"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+        </svg>
+    </div>
 </div>
-<div aria-hidden="true" class="absolute pointer-events-none inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
-  <div class="blur-[106px] h-56 bg-gradient-to-br from-[var(--color-main)] to-purple-400 dark:from-blue-700"></div>
-  <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
+<div aria-hidden="true"
+     class="absolute pointer-events-none inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+    <div class="blur-[106px] h-56 bg-gradient-to-br from-[var(--color-main)] to-purple-400 dark:from-blue-700"></div>
+    <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
 </div>
 <Container>
-<div class="space-y-10 pt-20 pb-10">
-  <div class="flex flex-col lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
-    <h1 class="text-[var(--color-main)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">Vision</h1>
-    <p class="text-md md:text-2xl text-white">Gesture Mode</p>
-  </div>
-  <div class="grid gap-6 mb-6 md:grid-cols-3">
-    <div>
-      <label for="urlInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT Broker URL</label>
-      <input required type="text" placeholder="test.mosquitto.org" id="urlInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-    </div>
-    <div>
-      <label for="portInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT Broker Port</label>
-      <input required type="text" placeholder="8081" id="portInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-    </div>
-    <div>
-      <label for="topicInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Main Topic To Connect To</label>
-      <input required type="text" placeholder="iotcraft-test" id="topicInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-    </div>
-  </div>
-	<div class="container">
-		<div class="btn"><button class="cursor-pointer" id="addButton">Add</button></div>
-		<div class="btn"><button class="cursor-pointer" id="removeButton">Remove</button></div>
-	</div>
-  <div class="relative overflow-x-auto rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="keybinds">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-          <th scope="col" class="px-6 py-3">
-            Left Hand
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Right Hand
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Message
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="bg-white dark:bg-gray-800">
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <select required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option selected value="None">None</option>
-              <option value="Closed_Fist">Closed Fist</option>
-              <option value="Open_Palm">Open Palm</option>
-              <option value="Pointing_Up">Pointing Up</option>
-              <option value="Thumb_Down">Thumbs Down</option>
-              <option value="Thumb_Up">Thumbs Up</option>
-              <option value="Victory">Victory</option>
-              <option value="ILoveYou">I Love You</option>
-            </select>
-          </th>
-          <td class="px-6 py-4">
-            <select required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option selected value="None">None</option>
-              <option value="Closed_Fist">Closed Fist</option>
-              <option value="Open_Palm">Open Palm</option>
-              <option value="Pointing_Up">Pointing Up</option>
-              <option value="Thumb_Down">Thumbs Down</option>
-              <option value="Thumb_Up">Thumbs Up</option>
-              <option value="Victory">Victory</option>
-              <option value="ILoveYou">I Love You</option>
-            </select>
-          </td>
-          <td class="px-6 py-4">
-            <input required type="text" placeholder="Message" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <label class="flex p-8 rounded-md bg-gray-800 border-gray-400 justify-center cursor-pointer">
-    <input id="startButton" type="checkbox" value="" class="sr-only peer">
-    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-    <span class="ms-3 mt-0.5 mr-4 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Gesture Detection</span>
-    <div id="connectionStatus">
+    <div class="space-y-10 pt-20 pb-10">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
+            <h1 class="text-[var(--color-main)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">
+                Vision</h1>
+            <p class="text-md md:text-2xl text-white">Gesture Mode</p>
+        </div>
+        <div class="grid gap-6 mb-6 md:grid-cols-3">
+            <div>
+                <label for="urlInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT
+                    Broker URL</label>
+                <input required type="text" placeholder="test.mosquitto.org" id="urlInput"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            </div>
+            <div>
+                <label for="portInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT
+                    Broker Port</label>
+                <input required type="text" placeholder="8081" id="portInput"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            </div>
+            <div>
+                <label for="topicInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Main
+                    Topic To Connect To</label>
+                <input required type="text" placeholder="iotcraft-test" id="topicInput"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            </div>
+        </div>
+        <div class="container">
+            <div class="btn">
+                <button class="cursor-pointer" id="addButton">Add</button>
+            </div>
+            <div class="btn">
+                <button class="cursor-pointer" id="removeButton">Remove</button>
+            </div>
+        </div>
+        <div class="relative overflow-x-auto rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="keybinds">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Left Hand
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Right Hand
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Message
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="bg-white dark:bg-gray-800">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <select required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected value="None">None</option>
+                            <option value="Closed_Fist">Closed Fist</option>
+                            <option value="Open_Palm">Open Palm</option>
+                            <option value="Pointing_Up">Pointing Up</option>
+                            <option value="Thumb_Down">Thumbs Down</option>
+                            <option value="Thumb_Up">Thumbs Up</option>
+                            <option value="Victory">Victory</option>
+                            <option value="ILoveYou">I Love You</option>
+                        </select>
+                    </th>
+                    <td class="px-6 py-4">
+                        <select required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected value="None">None</option>
+                            <option value="Closed_Fist">Closed Fist</option>
+                            <option value="Open_Palm">Open Palm</option>
+                            <option value="Pointing_Up">Pointing Up</option>
+                            <option value="Thumb_Down">Thumbs Down</option>
+                            <option value="Thumb_Up">Thumbs Up</option>
+                            <option value="Victory">Victory</option>
+                            <option value="ILoveYou">I Love You</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4">
+                        <input required type="text" placeholder="Message"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <label class="flex p-8 rounded-md bg-gray-800 border-gray-400 justify-center cursor-pointer">
+            <input id="startButton" type="checkbox" value="" class="sr-only peer">
+            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+            <span class="ms-3 mt-0.5 mr-4 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Gesture Detection</span>
+            <div id="connectionStatus">
       <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300">
         <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
         Deactivated
       </span>
+            </div>
+        </label>
+        <span class="text-xs text-gray-300">Note: The AI model used for processing runs fully on your device. Your video feed is never sent to any server.</span>
+        <div class="relative bg-gray-800 rounded-lg">
+            <video id="camera" class="rotate rounded-lg w-full h-full opacity-100" autoplay playsinline></video>
+            <canvas id="canvas"
+                    class="rotate rounded-lg absolute z-10 top-0 left-0 right-0 bottom-0 min-w-full min-h-full max-w-full max-h-full"
+                    height="720" width="1280"></canvas>
+        </div>
+        <p id="output" class="text-white"></p>
     </div>
-  </label>
-  <span class="text-xs text-gray-300">Note: The AI model used for processing runs fully on your device. Your video feed is never sent to any server.</span>
-  <div class="relative bg-gray-800 rounded-lg">
-    <video id="camera" class="rotate rounded-lg w-full h-full opacity-100" autoplay playsinline></video>
-    <canvas id="canvas" class="rotate rounded-lg absolute z-10 top-0 left-0 right-0 bottom-0 min-w-full min-h-full max-w-full max-h-full" height="720" width="1280"></canvas>
-  </div>
-  <p id="output" class="text-white"></p>
-</div>
 </Container>
 <script>
-import mqtt from "mqtt"
-import {
-  type GestureRecognizerResult,
-  DrawingUtils,
-  GestureRecognizer,
-  FilesetResolver
-} from "@mediapipe/tasks-vision";
-const loadingScreen = window.document.getElementById("loadingScreen") as HTMLElement;
-const camera = window.document.getElementById("camera") as HTMLVideoElement;
-const canvas = window.document.getElementById("canvas") as HTMLCanvasElement;
-const output = window.document.getElementById("output") as HTMLElement;
-const table = document.getElementById("keybinds") as HTMLTableElement;
-const startButton = window.document.getElementById("startButton") as HTMLButtonElement;
-const addButton = window.document.getElementById("addButton") as HTMLButtonElement;
-const removeButton = window.document.getElementById("removeButton") as HTMLButtonElement;
-const connectionStatus = window.document.getElementById("connectionStatus") as HTMLElement;
-const drawingCanvas = canvas.getContext("2d") as CanvasRenderingContext2D;
-const urlInput = window.document.getElementById("urlInput") as HTMLInputElement;
-const portInput = window.document.getElementById("portInput") as HTMLInputElement;
-const topicInput = window.document.getElementById("topicInput") as HTMLInputElement;
-const parameters = new URLSearchParams(window.location.search);
-if (parameters.get("url") !== null) {
-  urlInput.value = parameters.get("url") as string;
-}
-if (parameters.get("port") !== null) {
-  portInput.value = parameters.get("port") as string;
-}
-if (parameters.get("topic") !== null) {
-  topicInput.value = parameters.get("topic") as string;
-}
-const recognizer = await GestureRecognizer.createFromOptions(await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"), {
-  baseOptions: {
-    modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
-    delegate: "GPU"
-  },
-  runningMode: "VIDEO",
-  numHands: 10
-});
-setTimeout(() => {
-  loadingScreen.classList.add("hide");
-}, 500);
-setTimeout(() => {
-  loadingScreen.style.display = "none";
-}, 1500);
-let url: string;
-let port: string;
-let topic: string;
-let cameraActive: boolean;
-let lastTime: number;
-let lastKeybind: string;
-let results: GestureRecognizerResult | undefined;
-let client: mqtt.MqttClient;
-startButton.addEventListener("click", () => {
-  if (startButton.disabled) {
-    return;
-  }
-  startButton.disabled = true;
-  activate();
-});
-function activate() {
-  if (cameraActive) {
-    cameraActive = false;
-    if (client !== undefined) {
-      client.end();
+    import mqtt from "mqtt"
+    import {
+        type GestureRecognizerResult,
+        DrawingUtils,
+        GestureRecognizer,
+        FilesetResolver
+    } from "@mediapipe/tasks-vision";
+    const loadingScreen = window.document.getElementById("loadingScreen") as HTMLElement;
+    const camera = window.document.getElementById("camera") as HTMLVideoElement;
+    const canvas = window.document.getElementById("canvas") as HTMLCanvasElement;
+    const output = window.document.getElementById("output") as HTMLElement;
+    const table = document.getElementById("keybinds") as HTMLTableElement;
+    const startButton = window.document.getElementById("startButton") as HTMLInputElement;
+    const addButton = window.document.getElementById("addButton") as HTMLButtonElement;
+    const removeButton = window.document.getElementById("removeButton") as HTMLButtonElement;
+    const connectionStatus = window.document.getElementById("connectionStatus") as HTMLElement;
+    const drawingCanvas = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const urlInput = window.document.getElementById("urlInput") as HTMLInputElement;
+    const portInput = window.document.getElementById("portInput") as HTMLInputElement;
+    const topicInput = window.document.getElementById("topicInput") as HTMLInputElement;
+    const parameters = new URLSearchParams(window.location.search);
+    if (parameters.get("url") !== null) {
+        urlInput.value = parameters.get("url") as string;
     }
-    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Deactivated</span>';
+    if (parameters.get("port") !== null) {
+        portInput.value = parameters.get("port") as string;
+    }
+    if (parameters.get("topic") !== null) {
+        topicInput.value = parameters.get("topic") as string;
+    }
+    const recognizer = await GestureRecognizer.createFromOptions(await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"), {
+        baseOptions: {
+            modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
+            delegate: "GPU"
+        },
+        runningMode: "VIDEO",
+        numHands: 10
+    });
     setTimeout(() => {
-      startButton.disabled = false;
-    }, 5000);
-  } else {
-    cameraActive = true;
-    connect();
-    connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Active</span>';
+        loadingScreen.classList.add("hide");
+    }, 500);
     setTimeout(() => {
-      startButton.disabled = false;
-    }, 5000);
-  }
-  window.navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
-    camera.srcObject = stream;
-    camera.addEventListener("loadeddata", predictWebcam);
-  });
-}
-function connect() {
-  url = urlInput.value;
-  port = portInput.value;
-  topic = topicInput.value;
-  if (url == "" && port == "" && topic == "") {
-    return;
-  }
-  if (url == "") {
-    url = "test.mosquitto.org";
-  }
-  if (port == "") {
-    port = "8081";
-  }
-  if (topic == "") {
-    topic = "iotcraft-test";
-  }
-  client = mqtt.connect("wss://" + url + ":" + port + "/mqtt", {
-    clientId: crypto.randomUUID(),
-    username: "",
-    password: "",
-    clean: true,
-  })
-  client.on("connect", () => {
-    client.subscribe(topic)
-    window.setInterval(sendGesture, 1000);
-  });
-}
-function predictWebcam() {
-  if (camera.currentTime !== lastTime) {
-    lastTime = camera.currentTime;
-    results = recognizer.recognizeForVideo(camera, Date.now());
-  }
-  drawingCanvas.save();
-  drawingCanvas.clearRect(0, 0, canvas.width, canvas.height);
-  if (results === undefined) {
-    return;
-  }
-  const landmarksResult = results.landmarks;
-  if (!landmarksResult) {
-    return;
-  }
-  const drawingUtils = new DrawingUtils(drawingCanvas);
-  for (const landmarks of landmarksResult) {
-    drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, {color: "#646464", lineWidth: 10});
-    drawingUtils.drawLandmarks(landmarks, {color: "#FFFFFF", lineWidth: 4});
-    const indexFinger = landmarks[8];
-    const x = indexFinger.x;
-    const y = indexFinger.y;
-    drawingCanvas.beginPath();
-    drawingCanvas.arc(x * canvas.width, y * canvas.height, 20, 0, 2 * Math.PI);
-    drawingCanvas.fillStyle = "#FF0000";
-    drawingCanvas.fill();
-    drawingCanvas.closePath();
-  }
-  drawingCanvas.restore();
-  const gestureResult = results.gestures;
-  if (!gestureResult) {
-    return;
-  }
-  // hands
-  let handBuilder = []
-  for (const handedness of results.handednesses) {
-    handBuilder.push(oppositeHand(handedness[0].displayName));
-  }
-  let hands = handBuilder.join(", ");
-  // gestures
-  let gestureBuilder = []
-  let confidenceBuilder = []
-  for (const gesture of gestureResult) {
-    const currentGesture = gesture[0];
-    const name = currentGesture.categoryName;
-    gestureBuilder.push(name);
-    confidenceBuilder.push((currentGesture.score * 100.0).toFixed(2));
-  }
-  let gestures = gestureBuilder.join(", ");
-  let confidences = confidenceBuilder.join(", ");
-  output.innerText = "Hands: " + hands + "\nGestures: " + gestures + "\n Confidences: " + confidences;
-  if (cameraActive) {
-    window.requestAnimationFrame(predictWebcam);
-  }
-}
-function sendGesture() {
-  if (results === undefined) {
-    return;
-  }
-  if (results.handednesses.length < 2) {
-    return;
-  }
-  // organize hand data
-  const firstHand = oppositeHand(results.handednesses[0][0].displayName);
-  const secondHand = oppositeHand(results.handednesses[1][0].displayName);
-  let rightHand = 0;
-  let leftHand = 0;
-  if (firstHand === "Right" && secondHand === "Left") {
-    leftHand = 1;
-  } else if (firstHand === "Left" && secondHand === "Right") {
-    rightHand = 1;
-  } else {
-    return;
-  }
-  // get gestures
-  const leftGesture = results.gestures[leftHand][0].categoryName;
-  const rightGesture = results.gestures[rightHand][0].categoryName;
-  // get requirements
-  for (let i = 1; i < table.rows.length; i++) {
-    const row = table.rows[i];
-    const leftRequirement = (row.cells[0].getElementsByTagName("select")[0] as HTMLSelectElement).value;
-    const rightRequirement = (row.cells[1].getElementsByTagName("select")[0] as HTMLSelectElement).value;
-    const keybind = (row.cells[2].getElementsByTagName("input")[0] as HTMLInputElement).value;
-    // send gesture
-    if (keybind === lastKeybind) {
-      continue;
+        loadingScreen.style.display = "none";
+    }, 1500);
+    let url: string;
+    let port: string;
+    let topic: string;
+    let cameraActive: boolean;
+    let lastTime: number;
+    let lastKeybind: string;
+    let results: GestureRecognizerResult | undefined;
+    let client: mqtt.MqttClient;
+    startButton.addEventListener("click", () => {
+        if (startButton.disabled) {
+            return;
+        }
+        startButton.disabled = true;
+        activate();
+    });
+    function activate() {
+        if (startButton.checked) {
+            cameraActive = true;
+            connect();
+            connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Active</span>';
+            setTimeout(() => {
+                startButton.disabled = false;
+            }, 2000);
+            window.navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
+                camera.srcObject = stream;
+                camera.addEventListener("loadeddata", predictWebcam);
+            });
+        } else {
+            cameraActive = false;
+            if (client !== undefined) {
+                client.end();
+            }
+            connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Deactivated</span>';
+            setTimeout(() => {
+                startButton.disabled = false;
+            }, 2000);
+        }
     }
-    if (leftGesture === leftRequirement && rightGesture === rightRequirement) {
-      client.publish(topic, keybind)
-      lastKeybind = keybind;
-      console.log("Sent gesture: " + keybind);
+    function connect() {
+        url = urlInput.value;
+        port = portInput.value;
+        topic = topicInput.value;
+        if (url == "" && port == "" && topic == "") {
+            return;
+        }
+        if (url == "") {
+            url = "test.mosquitto.org";
+        }
+        if (port == "") {
+            port = "8081";
+        }
+        if (topic == "") {
+            topic = "iotcraft-test";
+        }
+        client = mqtt.connect("wss://" + url + ":" + port + "/mqtt")
+        client.stream.on('error', () => {
+            client.end();
+            connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Deactivated</span>';
+            startButton.checked = false;
+            window.alert("Connection failed. Double-check the URL and port.");
+        });
+        client.on("connect", () => {
+            client.subscribe(topic)
+            window.setInterval(sendGesture, 1000);
+        });
     }
-  }
-}
-function oppositeHand(hand) {
-  return hand === "Left" ? "Right" : "Left";
-}
-addButton.addEventListener("click", addKeybind);
-function addKeybind() {
-  const row = table.rows[1];
-  const clone = row.cloneNode(true);
-  table.appendChild(clone);
-}
-removeButton.addEventListener("click", removeKeybind);
-function removeKeybind() {
-  if (table.rows.length > 2) {
-    table.deleteRow(table.rows.length - 1);
-  }
-}
+    function predictWebcam() {
+        if (camera.currentTime !== lastTime) {
+            lastTime = camera.currentTime;
+            results = recognizer.recognizeForVideo(camera, Date.now());
+        }
+        drawingCanvas.save();
+        drawingCanvas.clearRect(0, 0, canvas.width, canvas.height);
+        if (results === undefined) {
+            return;
+        }
+        const landmarksResult = results.landmarks;
+        if (!landmarksResult) {
+            return;
+        }
+        const drawingUtils = new DrawingUtils(drawingCanvas);
+        for (const landmarks of landmarksResult) {
+            drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, {
+                color: "#646464",
+                lineWidth: 10
+            });
+            drawingUtils.drawLandmarks(landmarks, {color: "#FFFFFF", lineWidth: 4});
+            const indexFinger = landmarks[8];
+            const x = indexFinger.x;
+            const y = indexFinger.y;
+            drawingCanvas.beginPath();
+            drawingCanvas.arc(x * canvas.width, y * canvas.height, 20, 0, 2 * Math.PI);
+            drawingCanvas.fillStyle = "#FF0000";
+            drawingCanvas.fill();
+            drawingCanvas.closePath();
+        }
+        drawingCanvas.restore();
+        const gestureResult = results.gestures;
+        if (!gestureResult) {
+            return;
+        }
+        // hands
+        let handBuilder = []
+        for (const handedness of results.handednesses) {
+            handBuilder.push(oppositeHand(handedness[0].displayName));
+        }
+        let hands = handBuilder.join(", ");
+        // gestures
+        let gestureBuilder = []
+        let confidenceBuilder = []
+        for (const gesture of gestureResult) {
+            const currentGesture = gesture[0];
+            const name = currentGesture.categoryName;
+            gestureBuilder.push(name);
+            confidenceBuilder.push((currentGesture.score * 100.0).toFixed(2));
+        }
+        let gestures = gestureBuilder.join(", ");
+        let confidences = confidenceBuilder.join(", ");
+        output.innerText = "Hands: " + hands + "\nGestures: " + gestures + "\n Confidences: " + confidences;
+        if (cameraActive) {
+            window.requestAnimationFrame(predictWebcam);
+        }
+    }
+    function sendGesture() {
+        if (results === undefined) {
+            return;
+        }
+        if (results.handednesses.length < 2) {
+            return;
+        }
+        // organize hand data
+        const firstHand = oppositeHand(results.handednesses[0][0].displayName);
+        const secondHand = oppositeHand(results.handednesses[1][0].displayName);
+        let rightHand = 0;
+        let leftHand = 0;
+        if (firstHand === "Right" && secondHand === "Left") {
+            leftHand = 1;
+        } else if (firstHand === "Left" && secondHand === "Right") {
+            rightHand = 1;
+        } else {
+            return;
+        }
+        // get gestures
+        const leftGesture = results.gestures[leftHand][0].categoryName;
+        const rightGesture = results.gestures[rightHand][0].categoryName;
+        // get requirements
+        for (let i = 1; i < table.rows.length; i++) {
+            const row = table.rows[i];
+            const leftRequirement = (row.cells[0].getElementsByTagName("select")[0] as HTMLSelectElement).value;
+            const rightRequirement = (row.cells[1].getElementsByTagName("select")[0] as HTMLSelectElement).value;
+            const keybind = (row.cells[2].getElementsByTagName("input")[0] as HTMLInputElement).value;
+            // send gesture
+            if (keybind === lastKeybind) {
+                continue;
+            }
+            if (leftGesture === leftRequirement && rightGesture === rightRequirement) {
+                client.publish(topic, keybind)
+                lastKeybind = keybind;
+                console.log("Sent gesture: " + keybind);
+            }
+        }
+    }
+    function oppositeHand(hand) {
+        return hand === "Left" ? "Right" : "Left";
+    }
+    addButton.addEventListener("click", addKeybind);
+    function addKeybind() {
+        const row = table.rows[1];
+        const clone = row.cloneNode(true);
+        table.appendChild(clone);
+    }
+    removeButton.addEventListener("click", removeKeybind);
+    function removeKeybind() {
+        if (table.rows.length > 2) {
+            table.deleteRow(table.rows.length - 1);
+        }
+    }
 </script>

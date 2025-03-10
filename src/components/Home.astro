@@ -2,46 +2,53 @@
 import Container from "./Container.astro"
 ---
 <section id="home">
-  <div aria-hidden="true" class="absolute pointer-events-none inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
-    <div class="blur-[106px] h-56 bg-gradient-to-br from-[var(--color-main)] to-purple-400 dark:from-blue-700"></div>
-    <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
-  </div>
-  <Container>
-    <div class="relative pt-36 ml-auto w-full text-center mx-auto">
-      <h1 class="text-gray-900 text-balance dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
-        Connecting the virtual world with the physical.
-      </h1>
-      <p class="mt-8 md:pl-20 md:pr-20 text-gray-700 dark:text-gray-300">
-        Who says a button in your Minecraft world can't turn on a lightbulb in your house? We're here to provide a solution.
-      </p>
-      <div class="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
-        <a href="/start" class="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-[var(--color-main)] before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
-          <span class="relative text-base font-semibold text-white">Get started</span>
-        </a>
-        <a href="https://github.com/tea-tech/iotcraft-website" target="_blank" rel="noopener noreferrer" class="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-[var(--color-main)]/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
-          <span class="relative text-base font-semibold text-[var(--color-main)] dark:text-white">Source code on GitHub</span>
-        </a>
-      </div>
-      <div class="py-8 mt-16 border-y border-gray-100 dark:border-gray-800 sm:flex justify-between space-x-12">
-        <div class="text-left mt-4 mb-4">
-          <h6 class="text-lg font-semibold text-gray-700 dark:text-white">A whole ecosystem for the taking</h6>
-          <p class="mt-1 text-gray-500">
-            Explore a wide range of integrations for games, electronics, and more. The possibilities are endless!
-          </p>
-        </div>
-        <div class="text-left mt-4 mb-4">
-          <h6 class="text-lg font-semibold text-gray-700 dark:text-white">Flexible and decentralized</h6>
-          <p class="mt-1 text-gray-500">
-            Don't want to use our servers or other public ones? That's no problem, you can host your own!
-          </p>
-        </div>
-        <div class="text-left mt-4 mb-4">
-          <h6 class="text-lg font-semibold text-gray-700 dark:text-white">Fully open-source</h6>
-          <p class="mt-1 text-gray-500">
-            You can find all of our code on our GitHub Organization. Plus, everything is licensed under the very permissive MIT license.
-          </p>
-        </div>
-      </div>
+    <div aria-hidden="true"
+         class="absolute pointer-events-none inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+        <div class="blur-[106px] h-56 bg-gradient-to-br from-[var(--color-main)] to-purple-400 dark:from-blue-700"></div>
+        <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
     </div>
-  </Container>
+    <Container>
+        <div class="relative pt-36 ml-auto w-full text-center mx-auto">
+            <h1 class="text-gray-900 text-balance dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
+                Connecting the virtual world with the physical.
+            </h1>
+            <p class="mt-8 md:pl-20 md:pr-20 text-gray-700 dark:text-gray-300">
+                Who says a button in your Minecraft world can't turn on a lightbulb in your house? We're here to provide
+                a solution.
+            </p>
+            <div class="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
+                <a href="/start"
+                   class="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-[var(--color-main)] before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+                    <span class="relative text-base font-semibold text-white">Get started</span>
+                </a>
+                <a href="https://github.com/tea-tech/iotcraft-website" target="_blank" rel="noopener noreferrer"
+                   class="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-[var(--color-main)]/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
+                    <span class="relative text-base font-semibold text-[var(--color-main)] dark:text-white">Source code on GitHub</span>
+                </a>
+            </div>
+            <div class="py-8 mt-16 border-y border-gray-100 dark:border-gray-800 sm:flex justify-between space-x-12">
+                <div class="text-left mt-4 mb-4">
+                    <h6 class="text-lg font-semibold text-gray-700 dark:text-white">A whole ecosystem for the
+                        taking</h6>
+                    <p class="mt-1 text-gray-500">
+                        Explore a wide range of integrations for games, electronics, and more. The possibilities are
+                        endless!
+                    </p>
+                </div>
+                <div class="text-left mt-4 mb-4">
+                    <h6 class="text-lg font-semibold text-gray-700 dark:text-white">Flexible and decentralized</h6>
+                    <p class="mt-1 text-gray-500">
+                        Don't want to use our servers or other public ones? That's no problem, you can host your own!
+                    </p>
+                </div>
+                <div class="text-left mt-4 mb-4">
+                    <h6 class="text-lg font-semibold text-gray-700 dark:text-white">Fully open-source</h6>
+                    <p class="mt-1 text-gray-500">
+                        You can find all of our code on our GitHub Organization. Plus, everything is licensed under the
+                        very permissive MIT license.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </Container>
 </section>

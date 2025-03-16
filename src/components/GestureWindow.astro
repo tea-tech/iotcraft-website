@@ -41,7 +41,7 @@ import Container from "./Container.astro";
             </div>
             <div>
                 <label for="topicInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Main
-                    Topic To Connect To</label>
+                    Topics To Send To</label>
                 <input required type="text" placeholder="iotcraft-test" id="topicInput"
                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
             </div>
@@ -173,7 +173,7 @@ import Container from "./Container.astro";
     }, 1500);
     let url: string;
     let port: string;
-    let topic: string;
+    let topics: string[];
     let cameraActive: boolean;
     let lastTime: number;
     let lastKeybind: string;
@@ -212,8 +212,8 @@ import Container from "./Container.astro";
     function connect() {
         url = urlInput.value;
         port = portInput.value;
-        topic = topicInput.value;
-        if (url == "" && port == "" && topic == "") {
+        topics = topicInput.value.split(",");
+        if (url == "" && port == "" && topics.toString() == "") {
             return;
         }
         if (url == "") {
@@ -222,8 +222,8 @@ import Container from "./Container.astro";
         if (port == "") {
             port = "8081";
         }
-        if (topic == "") {
-            topic = "iotcraft-test";
+        if (topics.toString() == "") {
+            topics = ["iotcraft-test"];
         }
         client = mqtt.connect("wss://" + url + ":" + port + "/mqtt")
         client.stream.on('error', () => {
@@ -233,7 +233,6 @@ import Container from "./Container.astro";
             window.alert("Connection failed. Double-check the URL and port.");
         });
         client.on("connect", () => {
-            client.subscribe(topic)
             window.setInterval(sendGesture, 1000);
         });
     }
@@ -327,13 +326,15 @@ import Container from "./Container.astro";
                 continue;
             }
             if (leftGesture === leftRequirement && rightGesture === rightRequirement) {
-                client.publish(topic, keybind)
+                for (const topic of topics) {
+                    client.publish(topic, keybind);
+                }
                 lastKeybind = keybind;
                 console.log("Sent gesture: " + keybind);
             }
         }
     }
-    function oppositeHand(hand) {
+    function oppositeHand(hand: string) {
         return hand === "Left" ? "Right" : "Left";
     }
     addButton.addEventListener("click", addKeybind);

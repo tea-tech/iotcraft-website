@@ -1,7 +1,5 @@
 ---
 import {AstroFont} from 'astro-font';
-import AppFooter from "../components/AppFooter.astro";
-import AppHeader from "../components/AppHeader.astro";
 import "../styles/global.css";
 ---
 <!doctype html>
@@ -22,9 +20,7 @@ import "../styles/global.css";
             googleFontsURL: 'https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap',
         }]}/>
     </head>
-    <body class="bg-white dark:bg-gray-950">
-        <AppHeader/>
+    <body>
         <slot/>
-        <AppFooter/>
     </body>
 </html>

@@ -5,7 +5,6 @@ import iotcraft from "../images/iotcraft.png";
 const links = [
     {destination: "/start", label: "Docs",},
     {destination: "/mqtt", label: "MQTT Client",},
-    {destination: "/hoverscreen", label: "Hoverscreen",},
     {destination: "/gesture", label: "Gesture",},
 ];
 ---
@@ -16,7 +15,7 @@ const links = [
                 <div class="relative z-20 flex w-full justify-between md:px-0 lg:w-fit">
                     <a href="/" aria-label="logo" class="flex items-center space-x-2">
                         <Image loading="eager" src={iotcraft} alt="IoTcraft Logo" class="size-9"/>
-                        <span class="text-2xl font-bold text-gray-900 dark:text-white">IoTcraft</span>
+                        <span class="text-2xl font-bold">IoTcraft</span>
                     </a>
                     <div class="relative flex max-h-10 items-center lg:hidden">
                         <button aria-label="hamburger" id="hamburger"

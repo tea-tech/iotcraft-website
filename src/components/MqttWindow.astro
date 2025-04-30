@@ -1,71 +1,52 @@
 ---
 import Container from "./Container.astro";
 ---
-<div aria-hidden="true"
-     class="absolute pointer-events-none inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+<div aria-hidden="true" class="absolute pointer-events-none inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
     <div class="blur-[106px] h-56 bg-gradient-to-br from-[var(--color-main)] to-purple-400 dark:from-blue-700"></div>
     <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
 </div>
 <Container>
     <div class="space-y-10 pt-20 pb-10">
         <div class="flex flex-col lg:flex-row lg:items-center lg:space-y-0 lg:space-x-8">
-            <h1 class="text-[var(--color-main)] shiny-sec text-5xl md:text-6xl font-medium text-pretty leading-none">
-                MQTT Client</h1>
-            <p class="text-md md:text-2xl text-white">Send and receive with ease.</p>
+            <h1 class="text-[var(--color-main)] shiny-sec text-5xl md:text-6xl text-pretty leading-none">MQTT Client</h1>
+            <p class="text-md md:text-2xl">Send and receive with ease.</p>
         </div>
         <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div>
-                <label for="urlInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT
-                    Broker URL</label>
-                <input type="text" id="urlInput"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="test.mosquitto.org" required/>
+                <label for="urlInput" class="block mb-2 text-sm">Enter MQTT Broker URL</label>
+                <input type="text" id="urlInput" class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="test.mosquitto.org" required/>
             </div>
             <div>
-                <label for="portInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter MQTT
-                    Broker Port</label>
-                <input type="text" id="portInput"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="8081" required/>
+                <label for="portInput" class="block mb-2 text-sm">Enter MQTT Broker Port</label>
+                <input type="text" id="portInput" class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="8081" required/>
             </div>
             <div>
-                <label for="topicSendInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter
-                    Topic To Send To</label>
-                <input type="text" id="topicSendInput"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="iotcraft/send" required/>
+                <label for="topicSendInput" class="block mb-2 text-sm">Enter Topic To Send To</label>
+                <input type="text" id="topicSendInput" class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="iotcraft/send" required/>
             </div>
             <div>
-                <label for="topicReceiveInput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter
-                    Topic To Receive From</label>
-                <input type="text" id="topicReceiveInput"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="iotcraft/receive" required/>
+                <label for="topicReceiveInput" class="block mb-2 text-sm">Enter Topic To Receive From</label>
+                <input type="text" id="topicReceiveInput" class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="iotcraft/receive" required/>
             </div>
         </div>
-        <label class="flex p-8 rounded-md bg-gray-800 border-gray-400 justify-center cursor-pointer">
+        <label class="flex p-8 rounded-lg bg-gray-50 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 justify-center cursor-pointer">
             <input id="connectButton" type="checkbox" value="" class="sr-only peer">
-            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-            <span class="ms-3 mt-0.5 mr-4 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle MQTT Connection</span>
+            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+            <span class="ms-3 mt-0.5 mr-4 text-sm">Toggle MQTT Connection</span>
             <div id="connectionStatus">
-        <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300">
-          <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-          Disconnected
-        </span>
+                <span class="inline-flex items-center bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300">
+                    <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Disconnected
+                </span>
             </div>
         </label>
-        <div class="bg-gray-800 shadow-md rounded-lg w-full">
-            <div class="p-4 border-b border-black bg-blue-800 text-white rounded-t-lg flex justify-between items-center">
-                <p class="text-lg font-semibold">MQTT Chat</p>
+        <div class="bg-gray-50 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-md rounded-lg w-full">
+            <div class="p-4 border-b border-gray-300 dark:border-gray-600 bg-blue-200 dark:bg-blue-800 rounded-t-lg flex justify-between items-center">
+                <p class="text-lg">MQTT Chat</p>
             </div>
             <div id="chatbox" class="p-4 h-80 overflow-y-auto"></div>
-            <div class="p-4 border-t border-black flex">
-                <input id="textInput" type="text" placeholder="Type a message"
-                       class="w-full bg-gray-700 text-white px-3 py-2 border rounded-l-md border-black focus:outline-none focus:ring-2 focus:ring-blue-500"></input>
-                <button id="sendButton"
-                        class="bg-blue-800 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition duration-300">
-                    Send
-                </button>
+            <div class="p-4 border-t border-gray-300 dark:border-gray-600 flex">
+                <input id="textInput" type="text" placeholder="Type a message..." class="w-full bg-gray-200 dark:bg-gray-700 px-3 py-2 border rounded-l-md border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800"></input>
+                <button id="sendButton" class="bg-blue-200 dark:bg-blue-800 px-4 py-2 rounded-r-md hover:bg-blue-50 dark:hover:bg-blue-600 transition duration-300">Send</button>
             </div>
         </div>
     </div>
@@ -111,7 +92,7 @@ import Container from "./Container.astro";
         connectButton.disabled = true;
         if (!connectButton.checked) {
             client.end();
-            connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Disconnected</span>';
+            connectionStatus.innerHTML = '<span class="inline-flex items-center bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded-full dark:bg-red-900 dark:text-red-300"><span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>Disconnected</span>';
             setTimeout(() => {
                 connectButton.disabled = false;
             }, 2000);
@@ -140,7 +121,7 @@ import Container from "./Container.astro";
             window.alert("Connection failed. Double-check the URL and port.");
         });
         client.on("connect", () => {
-            connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Connected</span>';
+            connectionStatus.innerHTML = '<span class="inline-flex items-center bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"><span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>Connected</span>';
             client.subscribe(topicReceive);
         });
         client.on("message", (_topic, message) => {
@@ -153,7 +134,7 @@ import Container from "./Container.astro";
     function receive(message: string) {
         const messageElement = document.createElement("div");
         messageElement.classList.add("mb-2");
-        messageElement.innerHTML = `<p class="bg-gray-700 text-white rounded-lg py-2 px-4 inline-block">${message}</p>`;
+        messageElement.innerHTML = `<p class="bg-gray-200 dark:bg-gray-700 rounded-lg py-2 px-4 inline-block">${message}</p>`;
         chatbox.appendChild(messageElement);
         chatbox.scrollTop = chatbox.scrollHeight;
     }
@@ -170,7 +151,7 @@ import Container from "./Container.astro";
         }
         const messageElement = document.createElement("div");
         messageElement.classList.add("mb-2", "text-right");
-        messageElement.innerHTML = `<p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">${message}</p>`;
+        messageElement.innerHTML = `<p class="bg-blue-200 dark:bg-blue-500 rounded-lg py-2 px-4 inline-block">${message}</p>`;
         chatbox.appendChild(messageElement);
         chatbox.scrollTop = chatbox.scrollHeight;
         for (const topic of topicSend) {

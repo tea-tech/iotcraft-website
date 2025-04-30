@@ -1,9 +1,13 @@
 ---
 import Layout from "../layouts/gesture.astro";
-import Window from "../components/GestureWindow.astro";
+import Main from "../components/GestureWindow.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
 ---
 <Layout>
+    <Header/>
     <main class="space-y-40 mb-40">
-        <Window/>
+        <Main/>
     </main>
+    <Footer/>
 </Layout>

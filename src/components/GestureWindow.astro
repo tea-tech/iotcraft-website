@@ -218,7 +218,7 @@ import Container from "./Container.astro";
             window.alert("Connection failed. Double-check the URL and port.");
         });
         client.on("connect", () => {
-            window.setInterval(sendGesture, 2000);
+            window.setInterval(sendGesture, 1000);
         });
     }
     function predictWebcam() {

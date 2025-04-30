@@ -251,7 +251,7 @@ import Container from "./Container.astro";
         // hands
         let handBuilder = []
         for (const handedness of results.handedness) {
-            handBuilder.push(oppositeHand(handedness[0].displayName));
+            handBuilder.push(handedness[0].displayName);
         }
         let hands = handBuilder.join(", ");
         // gestures
@@ -298,10 +298,6 @@ import Container from "./Container.astro";
                 }
             }
         }
-    }
-    function oppositeHand(hand: string) {
-        // required because the MediaPipe model outputs the hand relative to the camera, but the user's perspective is mirrored
-        return hand === "Left" ? "Right" : "Left";
     }
     addButton.addEventListener("click", addKeybind);
     function addKeybind() {
